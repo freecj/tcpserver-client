@@ -1,6 +1,6 @@
-FName=a
-LName=a
-Num=4
-Repeat=9
-Score=4
+FName=Bob
+LName=Smith
+Num=5
+Repeat=12
+Score=8
 
