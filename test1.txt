@@ -1,6 +1,6 @@
 FName=Bob
 LName=Smith
-Num=2
-Repeat=13
-Score=9
+Num=3
+Repeat=19
+Score=13
 

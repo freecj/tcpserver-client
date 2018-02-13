@@ -1,3 +1,10 @@
+/************************************************
+*
+* Author: <Jian Cao>
+* Assignment: <Prgrame 2 >
+* Class: <CSI 4321>
+*
+************************************************/
 package G8R.app;
 
 import java.net.Socket;
@@ -36,9 +43,13 @@ public class G8RClient {
 
 	/**
 	 * Constructor of client
-	 * @param ip name or ip addr
-	 * @param port int number
-	 * @param FileName String 
+	 * 
+	 * @param ip
+	 *            name or ip addr
+	 * @param port
+	 *            int number
+	 * @param FileName
+	 *            String
 	 */
 	public G8RClient(String ip, int port, String FileName) {
 		try {
@@ -141,7 +152,8 @@ public class G8RClient {
 
 	/**
 	 * write cookielist to file
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public void writeCookieToFile() throws IOException {
 
@@ -179,7 +191,9 @@ public class G8RClient {
 
 	/**
 	 * Send first request
-	 * @param function function name
+	 * 
+	 * @param function
+	 *            function name
 	 */
 	public void sendRequest(String function) {
 		try {
@@ -202,7 +216,9 @@ public class G8RClient {
 
 	/**
 	 * send not the first request
-	 * @param param params of request message
+	 * 
+	 * @param param
+	 *            params of request message
 	 */
 	public void sendRequest(String[] param) {
 		try {
@@ -248,13 +264,18 @@ public class G8RClient {
 	}
 
 	/**
+	 * client main function
+	 * 
 	 * @param args
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 		try {
-			if ((args.length <= 2) || (args.length > 3)) // Test for correct # of args
+			if ((args.length <= 2) || (args.length > 3)) {
+				// Test for correct # of args
 				throw new IllegalArgumentException("Parameter(s): <Server> [<Port>] <Cookiefile>");
+			}
+
 			String server = args[0]; // Server name or IP address
 			// Convert argument String to bytes using the default character encoding
 			int servPort = Integer.parseInt(args[1]);
@@ -274,27 +295,34 @@ public class G8RClient {
 					String test = foreStr + userInput;
 
 					if (index == firstTime) {
+						// input function
 						if (!client.isValidParam(test)) {
+							// input error
 							System.err.println("Bad user input: Function not a proper token (alphanumeric)");
 							System.err.flush();
 							System.out.print("Function>");
 							System.out.flush();
-
+							// input again
 							continue;
 						}
+						// client send new function
 						client.sendRequest(userInput);
 					} else {
+						// input params
 						if (!client.isValidParam(test)) {
 							System.err.println("Bad user input: Params not a proper token (alphanumeric)");
 							System.err.flush();
 							System.out.print(client.g8rResponse.getMessage());
 							System.out.flush();
+							// input again
 							continue;
 						}
 						System.out.println(userInput);
 						String[] param = userInput.split(" ");
+						// client send request with new param
 						client.sendRequest(param);
 					}
+					// client read response message
 					client.read();
 					index++;
 				}
