@@ -3,9 +3,6 @@ package G8R.app;
 import java.net.Socket;
 import java.util.Set;
 
-import com.sun.security.ntlm.Client;
-import com.sun.xml.internal.ws.Closeable;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -103,7 +100,7 @@ public class G8RClient {
 					// response message status is error
 					System.err.print(g8rResponse.getMessage());
 				}
-				
+
 				// update cookielist in request message
 				CookieList responseCookieList = g8rResponse.getCookieList();
 				CookieList reqeustCookieList = g8rRequest.getCookieList();
@@ -113,6 +110,7 @@ public class G8RClient {
 					reqeustCookieList.add(name, value);
 				}
 				g8rRequest.setCookieList(reqeustCookieList);
+				// write to file
 				writeCookieToFile();
 				if (endFlag.equals(g8rResponse.getFunction())) {
 					close();
@@ -143,18 +141,14 @@ public class G8RClient {
 
 	/**
 	 * write cookielist to file
+	 * @throws IOException 
 	 */
-	public void writeCookieToFile() {
-		try {
-			File file = new File(cookieFileName);
-			MessageOutput cookieFile = new MessageOutput(new FileOutputStream(file.getAbsoluteFile()));
-			g8rRequest.getCookieList().encode(cookieFile);
-			cookieFile.close();
+	public void writeCookieToFile() throws IOException {
 
-		} catch (IOException e) {
-			System.err.println("cookiefile write failed:");
-			System.exit(1);
-		}
+		File file = new File(cookieFileName);
+		MessageOutput cookieFile = new MessageOutput(new FileOutputStream(file.getAbsoluteFile()));
+		g8rRequest.getCookieList().encode(cookieFile);
+		cookieFile.close();
 	}
 
 	/**
