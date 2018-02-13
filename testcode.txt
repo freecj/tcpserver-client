@@ -1,6 +1,0 @@
-FName=Cao
-LName=Jian
-Num=7
-Repeat=2
-Score=3
-

@@ -2,6 +2,10 @@ package G8R.app;
 
 import java.net.Socket;
 import java.util.Set;
+
+import com.sun.security.ntlm.Client;
+import com.sun.xml.internal.ws.Closeable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,12 +51,14 @@ public class G8RClient {
 			// pass the filename or directory name to File object
 			File file = new File(cookieFileName);
 			if (!file.exists()) {
+				// file is not existed, then create an empty cookielist file.
 				file.createNewFile();
 				OutputStream cookieFile = new FileOutputStream(file.getAbsoluteFile());
 				cookieFile.write(MessageDelimiter.getBytes());
 				cookieFile.close();
 				cookieClient = new CookieList();
 			} else {
+				// open the file and read the cookielist.
 				InputStream inCookieFile = new FileInputStream(file.getAbsoluteFile());
 				MessageInput inMsg = new MessageInput(inCookieFile);
 				cookieClient = new CookieList(inMsg);
@@ -62,6 +68,7 @@ public class G8RClient {
 			socketIn = new MessageInput(socket.getInputStream());
 			String[] param = new String[0];
 			String function = "inital";
+			// new a g8r request for initalization
 			g8rRequest = new G8RRequest(function, param, cookieClient);
 
 		} catch (IOException e) {
@@ -70,6 +77,10 @@ public class G8RClient {
 			System.exit(1);
 		} catch (ValidationException e) {
 			System.err.println("cookieClient init failed:");
+			close();
+			System.exit(1);
+		} catch (Exception e) {
+			System.err.println("other exception:");
 			close();
 			System.exit(1);
 		}
@@ -82,13 +93,18 @@ public class G8RClient {
 		try {
 			G8RMessage temp = G8RMessage.decode(socketIn);
 			if (temp instanceof G8RResponse) {
+				// messsage is response
 				g8rResponse = (G8RResponse) temp;
 
 				if (okStatsus.equals(g8rResponse.getStatus())) {
-					System.out.println(g8rResponse.getMessage());
+					// response message status is ok
+					System.out.print(g8rResponse.getMessage());
 				} else {
-					System.err.println(g8rResponse.getMessage());
+					// response message status is error
+					System.err.print(g8rResponse.getMessage());
 				}
+				
+				// update cookielist in request message
 				CookieList responseCookieList = g8rResponse.getCookieList();
 				CookieList reqeustCookieList = g8rRequest.getCookieList();
 				Set<String> keys = responseCookieList.getNames();
@@ -97,11 +113,8 @@ public class G8RClient {
 					reqeustCookieList.add(name, value);
 				}
 				g8rRequest.setCookieList(reqeustCookieList);
-				
+				writeCookieToFile();
 				if (endFlag.equals(g8rResponse.getFunction())) {
-					File file = new File(cookieFileName);
-					MessageOutput cookieFile = new MessageOutput(new FileOutputStream(file.getAbsoluteFile()));
-					reqeustCookieList.encode(cookieFile);
 					close();
 					System.exit(0);
 				} else {
@@ -109,6 +122,7 @@ public class G8RClient {
 				}
 
 			} else {
+				// otherwise wrong answer
 				throw new ValidationException("Message is other", "");
 			}
 		} catch (ValidationException e) {
@@ -119,8 +133,28 @@ public class G8RClient {
 			System.err.println("G8RMessage decode failed: IOException");
 			close();
 			System.exit(1);
+		} catch (Exception e) {
+			System.err.println("other exception:");
+			close();
+			System.exit(1);
 		}
 
+	}
+
+	/**
+	 * write cookielist to file
+	 */
+	public void writeCookieToFile() {
+		try {
+			File file = new File(cookieFileName);
+			MessageOutput cookieFile = new MessageOutput(new FileOutputStream(file.getAbsoluteFile()));
+			g8rRequest.getCookieList().encode(cookieFile);
+			cookieFile.close();
+
+		} catch (IOException e) {
+			System.err.println("cookiefile write failed:");
+			System.exit(1);
+		}
 	}
 
 	/**
@@ -128,6 +162,7 @@ public class G8RClient {
 	 */
 	public void close() {
 		try {
+			writeCookieToFile();
 			if (socket != null && !socket.isClosed())
 				socket.close();
 		} catch (IOException e) {
@@ -157,11 +192,16 @@ public class G8RClient {
 			g8rRequest.setFunction(function);
 			g8rRequest.encode(socketOut);
 		} catch (ValidationException e) {
+
 			System.err.println("socket send Request failed: ValidationException");
-			System.exit(1);
+
 		} catch (IOException e) {
-			e.printStackTrace();
+			close();
 			System.err.println("socket send Request failed: IOException");
+			System.exit(1);
+		} catch (Exception e) {
+			System.err.println("other exception:");
+			close();
 			System.exit(1);
 		}
 	}
@@ -178,9 +218,13 @@ public class G8RClient {
 		} catch (ValidationException e) {
 			System.err.println("socket send Request failed: ValidationException");
 		} catch (IOException e) {
-			e.printStackTrace();
+			close();
 			System.err.println("socket send Request failed: IOException");
-			System.exit(0);
+			System.exit(1);
+		} catch (Exception e) {
+			System.err.println("other exception:");
+			close();
+			System.exit(1);
 		}
 	}
 
@@ -215,7 +259,7 @@ public class G8RClient {
 	 */
 	public static void main(String[] args) throws IOException {
 		try {
-			if ((args.length < 2) || (args.length > 3)) // Test for correct # of args
+			if ((args.length <= 2) || (args.length > 3)) // Test for correct # of args
 				throw new IllegalArgumentException("Parameter(s): <Server> [<Port>] <Cookiefile>");
 			String server = args[0]; // Server name or IP address
 			// Convert argument String to bytes using the default character encoding
@@ -225,22 +269,34 @@ public class G8RClient {
 
 			G8RClient client = new G8RClient(server, servPort, cookieFileName);
 
-			System.out.println("please input the function:");
+			System.out.print("Function>");
 
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			int index = 0;
 			while (true) {
 				String userInput = "";
-				String formStr = " ";
+				String foreStr = " ";
 				if ((userInput = stdIn.readLine()) != null) {
-					String test = formStr + userInput;
-					if (!client.isValidParam(test)) {
-						System.err.println("Bad user input:  not a proper token (alphanumeric)");
-						continue;
-					}
+					String test = foreStr + userInput;
+
 					if (index == firstTime) {
+						if (!client.isValidParam(test)) {
+							System.err.println("Bad user input: Function not a proper token (alphanumeric)");
+							System.err.flush();
+							System.out.print("Function>");
+							System.out.flush();
+
+							continue;
+						}
 						client.sendRequest(userInput);
 					} else {
+						if (!client.isValidParam(test)) {
+							System.err.println("Bad user input: Params not a proper token (alphanumeric)");
+							System.err.flush();
+							System.out.print(client.g8rResponse.getMessage());
+							System.out.flush();
+							continue;
+						}
 						System.out.println(userInput);
 						String[] param = userInput.split(" ");
 						client.sendRequest(param);
@@ -248,10 +304,9 @@ public class G8RClient {
 					client.read();
 					index++;
 				}
-
 			}
 		} catch (Exception e) {
-			System.err.println("Client main() exception.");
+			System.err.println(e.toString() + "client has exception");
 		}
 
 	}
