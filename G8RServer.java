@@ -6,14 +6,12 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.util.logging.Level;  
+import java.util.logging.Logger; 
 public class G8RServer {
-	 public static final int port = 80;
-	public G8RServer() {
-		// TODO Auto-generated constructor stub
-	}
-	 public void init() {    
-	        try {    
-	          
+	private Logger logger = Logger.getLogger(G8RServer.class.getName());  
+	public G8RServer(int port, int threadNum) {
+		 try {    
 	            ServerSocket serverSocket = new ServerSocket(port);    
 	            while (true) {    
 	               
@@ -22,49 +20,24 @@ public class G8RServer {
 	                new HandlerThread(client);    
 	            }    
 	        } catch (Exception e) {    
-	            System.out.println(" " + e.getMessage());    
+	            System.err.println(" " + e.getMessage());    
 	        }    
-	    }    
-	 public static void main(String[] args) {    
-		 System.out.println("Server...\n");    
-	        G8RServer server = new G8RServer();    
-	        server.init();    
+	}
+	
+	 public static void main(String[] args) {   
+		 if ((args.length <= 1) || (args.length > 2)) {
+				// Test for correct # of args
+			    System.err.println("Echo server requires 2 argument: <Server> <thread number>");
+				throw new IllegalArgumentException("Parameter(s): <Server> <thread number>");
+			}
+
+			int servPort = Integer.parseInt(args[0]);
+			int threadNum = Integer.parseInt(args[1]);
+            while (true) {
+            	  G8RServer server = new G8RServer(servPort, threadNum);    
+            }
+	      
+	       
 	 }    
-	 private class HandlerThread implements Runnable {    
-	        private Socket socket;    
-	        public HandlerThread(Socket client) {    
-	            socket = client;    
-	            new Thread(this).start();    
-	        }    
-
-	        public void run() {    
-	            try {    
-	              
-	                BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));    
-	                String clientInputStr = input.readLine();
-	                System.out.println("cleint msg: " + clientInputStr);    
-
-	              
-	                PrintStream out = new PrintStream(socket.getOutputStream());    
-	                System.out.print("input");    
-	              
-	                String s = new BufferedReader(new InputStreamReader(System.in)).readLine();    
-	                out.println(s);    
-
-	                out.close();    
-	                input.close();    
-	            } catch (Exception e) {    
-	                System.out.println(": " + e.getMessage());    
-	            } finally {    
-	                if (socket != null) {    
-	                    try {    
-	                        socket.close();    
-	                    } catch (Exception e) {    
-	                        socket = null;    
-	                        System.out.println(":" + e.getMessage());    
-	                    }    
-	                }    
-	            }   
-	        }    
-	    }    
+	 
 }

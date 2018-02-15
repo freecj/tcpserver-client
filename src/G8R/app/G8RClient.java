@@ -270,6 +270,7 @@ public class G8RClient {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+		G8RClient client = null;
 		try {
 			if ((args.length <= 2) || (args.length > 3)) {
 				// Test for correct # of args
@@ -282,7 +283,7 @@ public class G8RClient {
 			// accept file name or directory name through command line args
 			String cookieFileName = args[2];
 
-			G8RClient client = new G8RClient(server, servPort, cookieFileName);
+			client = new G8RClient(server, servPort, cookieFileName);
 
 			System.out.print("Function>");
 
@@ -317,7 +318,7 @@ public class G8RClient {
 							// input again
 							continue;
 						}
-						System.out.println(userInput);
+
 						String[] param = userInput.split(" ");
 						// client send request with new param
 						client.sendRequest(param);
@@ -328,7 +329,14 @@ public class G8RClient {
 				}
 			}
 		} catch (Exception e) {
-			System.err.println(e.toString() + "client has exception");
+			System.err.println(e.toString() + "main has exception");
+
+		} finally {
+			if (client != null) {
+				client.close();
+			} else {
+				System.err.println("client is null");
+			}
 		}
 
 	}
