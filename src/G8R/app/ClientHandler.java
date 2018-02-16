@@ -1,7 +1,10 @@
 package G8R.app;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import G8R.serialization.G8RMessage;
@@ -13,25 +16,33 @@ import G8R.serialization.ValidationException;
 
 public class ClientHandler implements Runnable {
 
-	/**
-	 * The socket connected to the client.
-	 */
-	private Socket clientSocket;
+ private static int timelimit;
+	 private Socket clntSock;
+	private Logger logger;
 
-	private Logger logger; // Server logger
 	private G8RRequest g8rRequest;
 	private G8RResponse g8rResponse;
 	private MessageOutput socketOut = null;
 	private MessageInput socketIn = null;
+	private static final String TIMELIMIT = "20000"; // Default limit (ms)
+	private static final String TIMELIMITPROP = "Timelimit"; // Property
+	
+	public ClientHandler(Socket clntSock, Logger logger) {
+		this.clntSock = clntSock;
+		this.logger = logger;
+		// Get the time limit from the System properties or take the default
+		timelimit = Integer.parseInt(System.getProperty(TIMELIMITPROP,TIMELIMIT));
+	}
 	/**
 	 * Creates a new ClientHandler thread for the socket provided.
 	 * 
 	 * @param clientSocket
 	 *            the socket to the client.
 	 */
-	public ClientHandler(Socket clientSocket, Logger logger) {
+	public static void handleEchoClient(Socket clientSocket, Logger logger) {
 		this.clientSocket = clientSocket;
 		this.logger = logger;
+		long endTime = System.currentTimeMillis() + timelimit;
 		try {
 			socketOut = new MessageOutput(clientSocket.getOutputStream());
 			socketIn = new MessageInput(clientSocket.getInputStream());
@@ -43,11 +54,11 @@ public class ClientHandler implements Runnable {
 				throw new ValidationException("Message is other", "");
 			}
 		} catch ( IOException e) {
-			
+			logger.log(Level.WARNING, "Exception in echo protocol", e);
 		} catch (ValidationException e) {
-			
+			logger.log(Level.WARNING, "Exception in echo protocol", e);
 		} catch(Exception e) {
-			
+			logger.log(Level.WARNING, "Exception in echo protocol", e);
 		}
 		
 	}
