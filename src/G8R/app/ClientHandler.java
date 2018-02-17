@@ -20,10 +20,7 @@ public class ClientHandler implements Runnable {
 	 private Socket clntSock;
 	private Logger logger;
 
-	private G8RRequest g8rRequest;
-	private G8RResponse g8rResponse;
-	private MessageOutput socketOut = null;
-	private MessageInput socketIn = null;
+
 	private static final String TIMELIMIT = "20000"; // Default limit (ms)
 	private static final String TIMELIMITPROP = "Timelimit"; // Property
 	
@@ -40,9 +37,8 @@ public class ClientHandler implements Runnable {
 	 *            the socket to the client.
 	 */
 	public static void handleEchoClient(Socket clientSocket, Logger logger) {
-		this.clientSocket = clientSocket;
-		this.logger = logger;
-		long endTime = System.currentTimeMillis() + timelimit;
+		
+	/*	long endTime = System.currentTimeMillis() + timelimit;
 		try {
 			socketOut = new MessageOutput(clientSocket.getOutputStream());
 			socketIn = new MessageInput(clientSocket.getInputStream());
@@ -60,7 +56,7 @@ public class ClientHandler implements Runnable {
 		} catch(Exception e) {
 			logger.log(Level.WARNING, "Exception in echo protocol", e);
 		}
-		
+		*/
 	}
 
 	/**
@@ -75,13 +71,13 @@ public class ClientHandler implements Runnable {
 	 * close socket of client
 	 */
 	public void close() {
-		try {
+		/*try {
 		
 			if (clientSocket != null && !clientSocket.isClosed())
 				clientSocket.close();
 		} catch (IOException e) {
 			System.err.println("client socket closed failed:");
 			System.exit(1);
-		}
+		}*/
 	}
 }
