@@ -47,7 +47,6 @@ public class G8RNameStep extends PollState {
 				String msString = values[0] + "'s Food mood>";
 
 				g8rResponse = new G8RResponse(statusOk, functionNameForFood, msString, beforeCookie);
-				System.out.println(msString);
 				g8rResponse.encode(socketOut);
 				context.setState(new G8RFoodStep(clntSock, logger));
 

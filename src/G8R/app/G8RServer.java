@@ -30,9 +30,7 @@ public class G8RServer {
 			ThreadPool = Executors.newFixedThreadPool(threadNum);
 			serverSocket = new ServerSocket();
 			serverSocket.setReuseAddress(true);
-			System.out.println("1");
 			serverSocket.bind(new InetSocketAddress(port));
-			System.out.println("1");
 			while (true) {
 				ThreadPool.execute(new ClientHandler(serverSocket.accept(), logger));
 			}

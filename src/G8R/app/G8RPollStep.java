@@ -23,7 +23,7 @@ public class G8RPollStep extends PollState{
 	public void generateMsg() {
 
 		CookieList beforeCookie = g8rRequest.getCookieList();
-		System.out.println(g8rRequest.getFunction());
+		
 		try {
 
 			if (strNameStep.equals(g8rRequest.getFunction())) {
