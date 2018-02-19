@@ -8,35 +8,44 @@ import G8R.serialization.ValidationException;
 
 public class Context {
 	public G8RNameStep nameStep;  
-	private PollState pollState;
-	private String strNameStep = "Poll";
-	public PollState getPollState() {  
-        return pollState;  
+	private boolean endFlag = false;
+	private PollState curstate;
+	
+	/**
+	 * @return
+	 */
+	public PollState getState() {  
+        return curstate;  
     }  
-	public void setPollState(PollState pollState) {  
-        this.pollState = pollState;  
+	/**
+	 * @param pollState
+	 */
+	public void setState(PollState pollState) {  
+        this.curstate = pollState;  
         
-        this.pollState.setContext(this);  
+        this.curstate.setContext(this);  
     }  
-	public void nameStepFunc() {
-		try {
-			pollState.read();
-		} catch (NullPointerException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		} catch (ValidationException e) {
-			
-			e.printStackTrace();
+	/**
+	 * 
+	 */
+	public void pull() {
+		if (curstate.read()) {
+			curstate.generateMsg();
 		}
-		if (strNameStep.equals(pollState.g8rRequest.getFunction())) {
-			pollState.generateOkMsg();
-		} else {
-			pollState.generateOkMsg();
-		}
+	
 
-		
 	}
+	/**
+	 * @return
+	 */
+	public boolean isEndFlag() {
+		return endFlag;
+	}
+	/**
+	 * 
+	 */
+	public void setEndFlag() {
+		this.endFlag = true;
+	}
+	
 }

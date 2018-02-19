@@ -118,7 +118,7 @@ public class G8RMessage {
 			token = token.substring(0, token.length() - headerSpaceDelimiter.length());
 			if (!isValidFunction(token)) {
 				/* function format is wrong */
-				throw new ValidationException("wrong function", token);
+				throw new ValidationException("wrong function", "Unexpected message");
 			}
 			function = token;
 			List<String> strList = new ArrayList<String>();
@@ -130,7 +130,7 @@ public class G8RMessage {
 					token = token.substring(0, token.length() - headerSpaceDelimiter.length());
 					if (!isValidFunction(token)) {
 						/* param[] format is wrong */
-						throw new ValidationException("wrong param", token);
+						throw new ValidationException("wrong param", "Param not a proper token (alphanumeric)");
 					}
 					strList.add(token);
 				} else if (token.indexOf(MessageDelimiter) != -1) {
@@ -138,7 +138,7 @@ public class G8RMessage {
 					token = token.substring(0, token.length() - MessageDelimiter.length());
 					if (!isValidFunction(token)) {
 						/* param[] format is wrong */
-						throw new ValidationException("wrong param", token);
+						throw new ValidationException("wrong param", "Param not a proper token (alphanumeric)");
 					}
 					strList.add(token);
 					break;
@@ -154,7 +154,7 @@ public class G8RMessage {
 			token = token.substring(0, token.length() - MessageDelimiter.length());
 			if (!isValidFunction(token)) {
 				/* function format is wrong */
-				throw new ValidationException("wrong function", token);
+				throw new ValidationException("wrong function", "Unexpected message");
 			}
 			function = token;
 			String[] param = new String[] {};
@@ -191,13 +191,13 @@ public class G8RMessage {
 		token = in.getNextEntry(headerSpaceDelimiter);
 		if (token.isEmpty()) {
 			/* function format is wrong */
-			throw new ValidationException("wrong function", token);
+			throw new ValidationException("wrong function", "Unexpected message");
 		}
 
 		token = token.substring(0, token.length() - headerSpaceDelimiter.length());
 		if (!isValidFunction(token)) {
 			/* function format is wrong */
-			throw new ValidationException("wrong function", token);
+			throw new ValidationException("wrong function", "Unexpected message");
 		}
 		function = token;
 
@@ -337,7 +337,7 @@ public class G8RMessage {
 
 		if (!isValidString(function)) {
 			/* function format is wrong */
-			throw new ValidationException("function format is wrong", "");
+			throw new ValidationException("function format is wrong", "Unexpected message" );
 		}
 		g8rFunction = function;
 	}

@@ -92,7 +92,7 @@ public class G8RRequest extends G8RMessage {
 			Objects.requireNonNull(params[i], "params element is null");
 
 			if (!isValidString(params[i])) {
-				throw new ValidationException("params format is wrong", "");
+				throw new ValidationException("params format is wrong", "Param not a proper token (alphanumeric)" );
 			}
 		}
 		g8rParam = (String[]) params.clone();// deep copy

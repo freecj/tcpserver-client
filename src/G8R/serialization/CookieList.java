@@ -91,14 +91,14 @@ public class CookieList {
 				if (token.isEmpty()) {
 					if (formatWrong) {
 						/* format is wrongl */
-						throw new ValidationException("cookie's value or name is not alphanumeric.", token);
+						throw new ValidationException("cookie's value or name is not alphanumeric.", "Cookie Value not a proper token (alphanumeric)" );
 					} else {
 						throw new EOFException("EOF");
 					}
 
 				} else if (token.indexOf(delimiter) == -1) {
 					/* cannot find the delimiter */
-					throw new ValidationException("cookie's value or name is not alphanumeric.", token);
+					throw new ValidationException("cookie's value or name is not alphanumeric.", "Cookie Value not a proper token (alphanumeric)");
 
 				} else {
 					token = token.substring(0, token.length() - 2);
@@ -119,7 +119,7 @@ public class CookieList {
 				}
 			} while (!token.isEmpty());
 			if (formatWrong) {
-				throw new ValidationException("cookie's value or name is not alphanumeric.", token);
+				throw new ValidationException("cookie's value or name is not alphanumeric.", "Cookie Value not a proper token (alphanumeric)");
 			}
 		} catch (EOFException e) {
 			/* getNextEntry() has EOFException */
@@ -233,6 +233,22 @@ public class CookieList {
 	public Set<String> getNames() {
 		Set<String> keys = new TreeSet<>(cookieMap.keySet()); // get name set
 		return keys;
+	}
+	/**
+	 * find
+	 * @param str 
+	 * @return true if find the str in the nameset.
+	 */
+	public boolean findName(String str) {
+		Iterator<String> iterCookie = cookieMap.keySet().iterator();// cookieMap's Iterator for loop
+		String nameCookie = ""; // name
+		while (iterCookie.hasNext()) {
+			nameCookie = (String) iterCookie.next(); // get name
+			if (nameCookie.equals(str)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
