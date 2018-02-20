@@ -1,7 +1,6 @@
 package G8R.app;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +35,11 @@ public abstract class PollState {
 	protected String statusOk = "OK";
 	protected String statusError = "ERROR";
 	protected String repeatStr = "Repeat";
+
+	private final String TIMELIMIT = "1000"; // Default limit (ms)
+	private final String TIMELIMITPROP = "Timelimit"; // Property
+	private int timeLimit;
+
 	/**
 	 * @param _context
 	 */
@@ -50,9 +54,16 @@ public abstract class PollState {
 	public PollState(Socket clientSocket, Logger logger) {
 		this.clntSock = clientSocket;
 		this.logger = logger;
+		timeLimit = Integer.parseInt(System.getProperty(TIMELIMITPROP,TIMELIMIT));
+		
+		// Get the time limit from the System properties or take the default
+		timeLimit = Integer.parseInt(System.getProperty(TIMELIMITPROP, TIMELIMIT));
 		try {
+			
 			socketOut = new MessageOutput(clntSock.getOutputStream());
 			socketIn = new MessageInput(clntSock.getInputStream());
+			clntSock.setSoTimeout(timeLimit);
+
 		} catch (NullPointerException | IOException e) {
 			close();
 			context.setEndFlag();
@@ -70,10 +81,11 @@ public abstract class PollState {
 
 		G8RMessage temp;
 		try {
+			
 			temp = G8RMessage.decode(socketIn);
 			if (temp instanceof G8RRequest) {
 				g8rRequest = (G8RRequest) temp;
-                return true;
+				return true;
 			} else {
 				throw new ValidationException("Message is other", "Not Request Msg");
 			}
@@ -128,12 +140,32 @@ public abstract class PollState {
 			g8rResponse = new G8RResponse(statusError, functionNameForNull, msg, beforeCookie);
 			g8rResponse.encode(socketOut);
 			close();
-
+			context.setEndFlag();
 		} catch (ValidationException e) {
 
 		} catch (IOException e) {
 
 		} catch (Exception e) {
+
+		}
+
+	}
+
+	/**
+	 * @param msg
+	 */
+	public void writerMsg() {
+
+		try {
+			g8rResponse.encode(socketOut);
+
+		} catch (IOException e) {
+			close();
+			context.setEndFlag();
+
+		} catch (Exception e) {
+			close();
+			context.setEndFlag();
 
 		}
 

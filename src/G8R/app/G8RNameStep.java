@@ -24,20 +24,8 @@ public class G8RNameStep extends PollState {
 	@Override
 	public void generateMsg() {
 
-		/*
-		 * try { read(); } catch (ValidationException e1) { CookieList beforeCookie =
-		 * new CookieList(); try { g8rResponse = new G8RResponse(statusErroe,
-		 * functionNameForNull, e1.getToken(), beforeCookie);
-		 * g8rResponse.encode(socketOut); close(); context.setEndFlag(); return; } catch
-		 * (ValidationException e) { close(); context.setEndFlag(); return; } catch
-		 * (IOException e) { close(); context.setEndFlag(); return; }
-		 * 
-		 * } catch (IOException e1) { close(); context.setEndFlag(); return; } catch
-		 * (Exception e) { close(); context.setEndFlag(); return; }
-		 */
-
 		CookieList beforeCookie = g8rRequest.getCookieList();
-		
+
 		try {
 
 			if (functionNameForName.equals(g8rRequest.getFunction()) && g8rRequest.getParams().length == 2) {
@@ -47,27 +35,28 @@ public class G8RNameStep extends PollState {
 				String msString = values[0] + "'s Food mood>";
 
 				g8rResponse = new G8RResponse(statusOk, functionNameForFood, msString, beforeCookie);
-				g8rResponse.encode(socketOut);
-				context.setState(new G8RFoodStep(clntSock, logger));
 
-			} else {
+				context.setState(new G8RFoodStep(clntSock, logger));
+				writerMsg();
+			} else if (functionNameForName.equals(g8rRequest.getFunction()) && g8rRequest.getParams().length != 2) {
+				// the param number does not match
 				String mString = "Poorly formed name. Name (First Last)>";
 
 				g8rResponse = new G8RResponse(statusError, functionNameForName, mString, beforeCookie);
-				g8rResponse.encode(socketOut);
+
+				writerMsg();
+			} else {
+				// error function name
+				generateErrorMsg("Unexpected message");
+				
 			}
 
 		} catch (ValidationException e) {
-			generateErrorMsg("Unexpected function");
-			context.setEndFlag();
-		} catch (IOException e) {
-			close();
-			context.setEndFlag();
+
 		} catch (Exception e) {
 			close();
 			context.setEndFlag();
 		}
 	}
-	
 
 }

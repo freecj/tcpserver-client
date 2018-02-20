@@ -2,7 +2,6 @@ package G8R.app;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,12 +13,11 @@ import java.util.logging.Logger;
  */
 public class ClientHandler implements Runnable {
 
-	private int timelimit;
+	
 	private Socket clntSock;
 	private Logger logger;
 
-	private static final String TIMELIMIT = "20000"; // Default limit (ms)
-	private static final String TIMELIMITPROP = "Timelimit"; // Property
+	
 
 	/**
 	 * @param clntSock
@@ -28,8 +26,7 @@ public class ClientHandler implements Runnable {
 	public ClientHandler(Socket clntSock, Logger logger) {
 		this.clntSock = clntSock;
 		this.logger = logger;
-		// Get the time limit from the System properties or take the default
-		timelimit = Integer.parseInt(System.getProperty(TIMELIMITPROP, TIMELIMIT));
+		
 	}
 
 	/**

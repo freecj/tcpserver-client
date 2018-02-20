@@ -30,27 +30,21 @@ public class G8RPollStep extends PollState{
 				if (beforeCookie.findName(strFirstName) && beforeCookie.findName(strSecondName)) {
 					String msString = beforeCookie.getValue(strFirstName) + "'s Food mood>";
 					g8rResponse = new G8RResponse(statusOk, functionNameForFood, msString, beforeCookie);
-					g8rResponse.encode(socketOut);
+					
 					context.setState(new G8RFoodStep(clntSock, logger));
 				} else {
 
 					g8rResponse = new G8RResponse(statusOk, functionNameForName, "Name (First Last)>", beforeCookie);
-					g8rResponse.encode(socketOut);
 					context.setState(new G8RNameStep(clntSock, logger));
 					
 				}
-
+				writerMsg();
 			} else {
 				generateErrorMsg("Unexpected function");
-				context.setEndFlag();
 			}
 
 		} catch (ValidationException e) {
-			generateErrorMsg("Unexpected function");
-			context.setEndFlag();
-		} catch (IOException e) {
-			close();
-			context.setEndFlag();
+			
 		} catch (Exception e) {
 			close();
 			context.setEndFlag();

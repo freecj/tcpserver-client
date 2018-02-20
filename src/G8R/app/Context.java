@@ -1,18 +1,19 @@
 package G8R.app;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.logging.Logger;
 
-import G8R.serialization.ValidationException;
 
+/**
+ * class which can identify the state of the server command
+ */
 public class Context {
-	public G8RNameStep nameStep;  
+
 	private boolean endFlag = false;
 	private PollState curstate;
 	
 	/**
-	 * @return
+	 * @return PollState which is the command abstract class
 	 */
 	public PollState getState() {  
         return curstate;  
@@ -22,13 +23,12 @@ public class Context {
 	 */
 	public void setState(PollState pollState) {  
         this.curstate = pollState;  
-        
         this.curstate.setContext(this);  
     }  
 	/**
-	 * 
+	 * the command which accept and respond the client
 	 */
-	public void pull() {
+	public void pull() { 
 		if (curstate.read()) {
 			curstate.generateMsg();
 		}
@@ -36,13 +36,13 @@ public class Context {
 
 	}
 	/**
-	 * @return
+	 * @return true if it's the ending of the command. Otherwise false.
 	 */
 	public boolean isEndFlag() {
 		return endFlag;
 	}
 	/**
-	 * 
+	 * set the ending command flag.
 	 */
 	public void setEndFlag() {
 		this.endFlag = true;

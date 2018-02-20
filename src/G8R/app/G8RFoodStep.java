@@ -13,6 +13,10 @@ import G8R.serialization.ValidationException;
  */
 public class G8RFoodStep extends PollState {
 
+	/**
+	 * @param clientSocket
+	 * @param logger
+	 */
 	public G8RFoodStep(Socket clientSocket, Logger logger) {
 		super(clientSocket, logger);
 	}
@@ -44,22 +48,22 @@ public class G8RFoodStep extends PollState {
 
 				beforeCookie.add(repeatStr, String.valueOf(repeateValue));
 				g8rResponse = new G8RResponse(statusOk, functionNameForNull, msString, beforeCookie);
-				g8rResponse.encode(socketOut);
+				writerMsg();
 				close();
 				context.setEndFlag();
 
-			} else {
+			} else if (functionNameForFood.equals(g8rRequest.getFunction()) && g8rRequest.getParams().length != 1) {
 				String mString = "Poorly formed food mood. " + beforeCookie.getValue(strFirstName) + "'s Food mood>";
-
 				g8rResponse = new G8RResponse(statusError, functionNameForFood, mString, beforeCookie);
-				g8rResponse.encode(socketOut);
+				
+				writerMsg();
+			} else {
+				// error function name
+				generateErrorMsg("Unexpected message");
+				
 			}
 
 		} catch (ValidationException e) {
-
-		} catch (IOException e) {
-			close();
-			context.setEndFlag();
 
 		} catch (Exception e) {
 			close();
