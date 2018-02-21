@@ -68,19 +68,19 @@ public class G8RMessage {
 
 		if (!isValidHeader(token)) {
 			/* header GOR\1.0 is wrong */
-			throw new ValidationException("wrong header", token);
+			throw new ValidationException("wrong header", "wrong header");
 		}
 
 		token = in.getNextEntry(headerSpaceDelimiter);
 		if (token.isEmpty()) {
-			throw new ValidationException("wrong type", token);
+			throw new ValidationException("wrong type", "wrong type");
 		}
 		token = token.substring(0, token.length() - headerSpaceDelimiter.length());
 
 		int type = isValidMessageType(token);
 		if (type == other) {
 			/* not request or response */
-			throw new ValidationException("wrong type", token);
+			throw new ValidationException("wrong type", "wrong type");
 		}
 		if (type == typeRequest) {
 			return generateRequestClass(in);
@@ -102,13 +102,13 @@ public class G8RMessage {
 		String token = "";
 		token = in.getNextEntry(headerSpaceDelimiter);
 		if (token.isEmpty()) {
-			throw new ValidationException("wrong Command", token);
+			throw new ValidationException("wrong Command", "wrong Command");
 		}
 
 		token = token.substring(0, token.length() - headerSpaceDelimiter.length());
 		if (!isValidRequestCommand(token)) {
 			/* command is wrong */
-			throw new ValidationException("wrong Command", token);
+			throw new ValidationException("wrong Command", "wrong Command");
 		}
 
 		token = in.getNextEntry(headerSpaceDelimiter, MessageDelimiter);
@@ -178,13 +178,13 @@ public class G8RMessage {
 		String message = "";
 		token = in.getNextEntry(headerSpaceDelimiter);
 		if (token.isEmpty()) {
-			throw new ValidationException("wrong status", token);
+			throw new ValidationException("wrong status", "wrong status");
 		}
 		token = token.substring(0, token.length() - headerSpaceDelimiter.length());
 
 		if (!isValidResponseStatus(token)) {
 			/* status format is wrong */
-			throw new ValidationException("wrong status", token);
+			throw new ValidationException("wrong status", "wrong status");
 		}
 		status = token;
 
@@ -203,13 +203,13 @@ public class G8RMessage {
 
 		token = in.getNextEntry(MessageDelimiter);
 		if (token.isEmpty()) {
-			throw new ValidationException("wrong message", token);
+			throw new ValidationException("wrong message", "wrong message");
 		}
 
 		token = token.substring(0, token.length() - MessageDelimiter.length());
 		if (!isValidMessage(token)) {
 			/* message format is wrong */
-			throw new ValidationException("wrong message", token);
+			throw new ValidationException("wrong message", "wrong message");
 		}
 
 		message = token;

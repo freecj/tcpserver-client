@@ -1,7 +1,5 @@
 package G8R.app;
 
-
-
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
@@ -10,20 +8,24 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.regex.Pattern;
 
 /**
- *Server that send and get G8RMessage
+ * Server that send and get G8RMessage
  */
 public class G8RServer {
 	private ExecutorService ThreadPool;
 	private Logger logger = Logger.getLogger(G8RServer.class.getName());
 	private ServerSocket serverSocket;
-	static private FileHandler fileTxt;
-    static private SimpleFormatter formatterTxt;
+	private FileHandler fileTxt;
+	private SimpleFormatter formatterTxt;
+
 	/**
 	 * constructor for server, use Executors newFixedThreadPool as thread pool
+	 * 
 	 * @param port
-	 * @param threadNum thread pool number
+	 * @param threadNum
+	 *            thread pool number
 	 */
 	public G8RServer(int port, int threadNum) {
 		try {
@@ -31,19 +33,18 @@ public class G8RServer {
 			ThreadPool = Executors.newFixedThreadPool(threadNum);
 			// Create a server socket to accept client connection requests
 			serverSocket = new ServerSocket();
-			//port reuse
+			// port reuse
 			serverSocket.setReuseAddress(true);
 			serverSocket.bind(new InetSocketAddress(port));
-			
-			logger.setLevel(Level.INFO);
-	        fileTxt = new FileHandler("connections.log");
-	        logger.addHandler(fileTxt);
 
-	        // create a TXT formatter
-	       // formatterTxt = new SimpleFormatter();
-	        //fileTxt.setFormatter(formatterTxt);
-	        
-	        
+			logger.setLevel(Level.INFO);
+			fileTxt = new FileHandler("connections.log");
+			logger.addHandler(fileTxt);
+
+			// create a TXT formatter
+			formatterTxt = new SimpleFormatter();
+			fileTxt.setFormatter(formatterTxt);
+
 			// Run forever, accepting and spawning a thread for each connection
 			while (true) {
 				ThreadPool.execute(new ClientHandler(serverSocket.accept(), logger));
@@ -55,6 +56,16 @@ public class G8RServer {
 	}
 
 	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(str).matches();
+	}
+
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -63,11 +74,13 @@ public class G8RServer {
 			System.err.println("Echo server requires 2 argument: <Port> <thread number>");
 			throw new IllegalArgumentException("Parameter(s): <Port> <thread number>");
 		}
-
-		int servPort = Integer.parseInt(args[0]);// Server port
-		int threadNum = Integer.parseInt(args[1]);//the number of thread in the thread pool
-
-		new G8RServer(servPort, threadNum);//initial the server
+		if (isNumeric(args[0]) && isNumeric(args[1])) {
+			int servPort = Integer.parseInt(args[0]);// Server port
+			int threadNum = Integer.parseInt(args[1]);// the number of thread in the thread pool
+			new G8RServer(servPort, threadNum);// initial the server
+		} else {
+			System.err.println("Echo server <Port> or <thread number> is not numeric.");
+		}
 
 	}
 

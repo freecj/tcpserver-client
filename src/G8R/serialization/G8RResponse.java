@@ -68,7 +68,7 @@ public class G8RResponse extends G8RMessage {
 	 */
 	@Override
 	public String toString() {
-		String result = "response: " + g8rStatus + " " + g8rFunction + " " + g8rMsg + "\r\n" + g8rCookieList.toString();
+		String result = "response: " + g8rStatus + " " + g8rFunction + " " + g8rMsg + " " + g8rCookieList.toString();
 		return result;
 	}
 

@@ -51,15 +51,15 @@ public class G8RRequest extends G8RMessage {
 	 */
 	@Override
 	public String toString() {
-		String result = "request: " + g8rFunction;
+		String result = "g8rrequest: " + g8rFunction;
 		StringBuilder ret = new StringBuilder("");
 		for (int i = 0; i < g8rParam.length; i++) {
 			ret.append(" ");
 			ret.append(g8rParam[i]);
 
 		}
-		result += ret.toString();
-		result += Delimiter;
+		result += " " + ret.toString();
+		// result += Delimiter;
 		result += g8rCookieList.toString();
 		return result;
 	}
@@ -92,7 +92,7 @@ public class G8RRequest extends G8RMessage {
 			Objects.requireNonNull(params[i], "params element is null");
 
 			if (!isValidString(params[i])) {
-				throw new ValidationException("params format is wrong", "Param not a proper token (alphanumeric)" );
+				throw new ValidationException("params format is wrong", "Param not a proper token (alphanumeric)");
 			}
 		}
 		g8rParam = (String[]) params.clone();// deep copy
@@ -113,16 +113,16 @@ public class G8RRequest extends G8RMessage {
 		Objects.requireNonNull(out, "out is null");
 		String header = "G8R/1.0 Q RUN " + g8rFunction;
 		out.write(header);
-        
+
 		for (String item : g8rParam) {
 			out.write(" ");
 			out.write(item);
 		}
 
 		out.write(Delimiter);
-		
+
 		g8rCookieList.encode(out);
-		//out.flush();
+		// out.flush();
 	}
 
 	/**

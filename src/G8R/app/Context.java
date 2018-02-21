@@ -1,7 +1,6 @@
 package G8R.app;
 
-import java.io.IOException;
-import java.util.logging.Logger;
+
 
 /**
  * class which can identify the state of the server command

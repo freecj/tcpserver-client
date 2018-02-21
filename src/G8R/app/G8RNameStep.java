@@ -1,6 +1,6 @@
 package G8R.app;
 
-import java.io.IOException;
+
 import java.net.Socket;
 import java.util.logging.Logger;
 
@@ -23,12 +23,12 @@ public class G8RNameStep extends PollState {
 
 	@Override
 	public void generateMsg() {
-
+		// get the cookielist from the request message
 		CookieList beforeCookie = g8rRequest.getCookieList();
 
 		try {
-
 			if (functionNameForName.equals(g8rRequest.getFunction()) && g8rRequest.getParams().length == 2) {
+				// NameStep command fits
 				String[] values = g8rRequest.getParams();
 				beforeCookie.add(strFirstName, values[0]);
 				beforeCookie.add(strSecondName, values[1]);
@@ -52,7 +52,7 @@ public class G8RNameStep extends PollState {
 			}
 
 		} catch (ValidationException e) {
-
+			close();
 		} catch (Exception e) {
 			close();
 

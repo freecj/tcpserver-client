@@ -2,7 +2,6 @@ package G8R.app;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import G8R.serialization.CookieList;
@@ -27,7 +26,7 @@ public abstract class PollState {
 	protected Socket clntSock;
 	protected Logger logger;
 
-	protected String strNameStep = "Poll";
+	protected String strNamePoll = "Poll";
 	protected String functionNameForName = "NameStep";
 	protected String functionNameForNull = "NULL";
 	protected String functionNameForFood = "FoodStep";
@@ -37,34 +36,40 @@ public abstract class PollState {
 	protected String strSecondName = "LName";
 	protected String repeatStr = "Repeat";
 
-	private final String TIMELIMIT = "1000"; // Default limit (ms)
+	private final String TIMELIMIT = "20000"; // Default limit (ms)
 	private final String TIMELIMITPROP = "Timelimit"; // Property
 	private int timeLimit;
 
+	protected String functionNameForSendGuess = "SendGuess";
+	protected String strNameGuess = "Guess";
 	/**
 	 * set the new context withe the new state to the new context.
-	 * @param _context which is modified since the state change.
+	 * 
+	 * @param _context
+	 *            which is modified since the state change.
 	 */
 	public void setContext(Context _context) {
 		this.context = _context;
 	}
 
 	/**
-	 * Constructor which get the clientSocket and logger, create the MessageOutput and MessageInput for decoding and encoding.
-	 * @param clientSocket client socket
-	 * @param logger 
+	 * Constructor which get the clientSocket and logger, create the MessageOutput
+	 * and MessageInput for decoding and encoding.
+	 * 
+	 * @param clientSocket
+	 *            client socket
+	 * @param logger
 	 */
 	public PollState(Socket clientSocket, Logger logger) {
 		this.clntSock = clientSocket;
 		this.logger = logger;
 
-		// Get the time limit from the System properties or take the default
-		timeLimit = Integer.parseInt(System.getProperty(TIMELIMITPROP, TIMELIMIT));
 		try {
 
 			socketOut = new MessageOutput(clntSock.getOutputStream());
 			socketIn = new MessageInput(clntSock.getInputStream());
-			// clntSock.setSoTimeout(timeLimit);
+			// Get the time limit from the System properties or take the default
+			timeLimit = Integer.parseInt(System.getProperty(TIMELIMITPROP, TIMELIMIT));
 
 		} catch (NullPointerException | IOException e) {
 			// socket close
@@ -76,14 +81,17 @@ public abstract class PollState {
 
 	/**
 	 * decode message from the client, assign it for g8rRequest
+	 * 
 	 * @throws NullPointerException
 	 * @throws IOException
 	 * @throws ValidationException
 	 * @return true if the type of message is G8RRequest. otherwise false.
 	 */
 	public boolean read() {
+		
 		G8RMessage temp;
 		try {
+			clntSock.setSoTimeout(timeLimit);
 			temp = G8RMessage.decode(socketIn);
 			if (temp instanceof G8RRequest) {
 				// the type of message from the socket is G8RRequest
@@ -95,10 +103,11 @@ public abstract class PollState {
 			}
 		} catch (ValidationException e1) {
 			CookieList beforeCookie = new CookieList();
+			System.out.println(e1.getToken());
 			try {
 				// if there is ValidationException, server need send NULL comand to end the
 				// connection.
-				g8rResponse = new G8RResponse(statusError, functionNameForNull, e1.getToken(), beforeCookie);
+				g8rResponse = new G8RResponse(statusError, functionNameForNull, "Bad version", beforeCookie);
 				g8rResponse.encode(socketOut);
 				close();
 				return false;
@@ -125,6 +134,7 @@ public abstract class PollState {
 	public void close() {
 		context.setEndFlag();
 		try {
+			logTerminateMsg();
 			if (clntSock != null && !clntSock.isClosed())
 				clntSock.close();
 
@@ -135,19 +145,20 @@ public abstract class PollState {
 	}
 
 	/**
-	 * When the server get the wrong things from the client, it need send the NULL function to the client to close the connection with the client.
-	 * @param msg wrong information in the g8rResponse.
+	 * When the server get the wrong things from the client, it need send the NULL
+	 * function to the client to close the connection with the client.
+	 * 
+	 * @param msg
+	 *            wrong information in the g8rResponse.
 	 */
 	public void generateErrorMsg(String msg) {
 		CookieList beforeCookie = g8rRequest.getCookieList();
 		try {
 			g8rResponse = new G8RResponse(statusError, functionNameForNull, msg, beforeCookie);
-			g8rResponse.encode(socketOut);
+			writerMsg();
 			close();
 
 		} catch (ValidationException e) {
-			close();
-		} catch (IOException e) {
 			close();
 		} catch (Exception e) {
 			close();
@@ -159,7 +170,7 @@ public abstract class PollState {
 	 */
 	public void writerMsg() {
 		try {
-
+			clntSock.setSoTimeout(timeLimit);
 			g8rResponse.encode(socketOut);
 			logMsg();
 		} catch (IOException e) {
@@ -178,8 +189,14 @@ public abstract class PollState {
 
 	}
 
+	public void logTerminateMsg() {
+		logger.info("<" + clntSock.getRemoteSocketAddress() + ">:" + "<" + clntSock.getPort() + ">-" + "<"
+				+ Thread.currentThread().getId() + "> ***client terminated" + System.getProperty("line.separator"));
+
+	}
+
 	/**
-	 * state change and send response message 
+	 * state change and send response message
 	 */
 	public abstract void generateMsg();
 

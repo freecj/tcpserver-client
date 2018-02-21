@@ -1,12 +1,7 @@
 package G8R.app;
 
-
 import java.net.Socket;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
-
 
 /**
  *
@@ -14,6 +9,7 @@ import java.util.logging.Logger;
 public class ClientHandler implements Runnable {
 	private Socket clntSock;
 	private Logger logger;
+	
 	/**
 	 * @param clntSock
 	 * @param logger
@@ -50,5 +46,4 @@ public class ClientHandler implements Runnable {
 		handleEchoClient();
 	}
 
-	
 }
