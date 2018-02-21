@@ -47,7 +47,7 @@ public class G8RPollStep extends PollState{
 			
 		} catch (Exception e) {
 			close();
-			context.setEndFlag();
+			
 		}
 	}
 }

@@ -48,14 +48,14 @@ public class G8RNameStep extends PollState {
 			} else {
 				// error function name
 				generateErrorMsg("Unexpected message");
-				
+
 			}
 
 		} catch (ValidationException e) {
 
 		} catch (Exception e) {
 			close();
-			context.setEndFlag();
+
 		}
 	}
 

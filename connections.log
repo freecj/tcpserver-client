@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-02-20T21:14:42</date>
+  <millis>1519182882112</millis>
+  <sequence>0</sequence>
+  <logger>G8R.app.G8RServer</logger>
+  <level>INFO</level>
+  <class>G8R.app.PollState</class>
+  <method>logMsg</method>
+  <thread>12</thread>
+  <message>&lt;/192.168.0.5:61568&gt;:&lt;61568&gt;-&lt;12&gt; [Received:&lt;request: Poll
+Cookies=[]&gt;|Sent: &lt;response: OK NameStep Name (First Last)&gt;
+Cookies=[]&gt;]
+</message>
+</record>

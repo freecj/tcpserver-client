@@ -6,8 +6,10 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  *Server that send and get G8RMessage
@@ -16,7 +18,8 @@ public class G8RServer {
 	private ExecutorService ThreadPool;
 	private Logger logger = Logger.getLogger(G8RServer.class.getName());
 	private ServerSocket serverSocket;
-
+	static private FileHandler fileTxt;
+    static private SimpleFormatter formatterTxt;
 	/**
 	 * constructor for server, use Executors newFixedThreadPool as thread pool
 	 * @param port
@@ -31,6 +34,16 @@ public class G8RServer {
 			//port reuse
 			serverSocket.setReuseAddress(true);
 			serverSocket.bind(new InetSocketAddress(port));
+			
+			logger.setLevel(Level.INFO);
+	        fileTxt = new FileHandler("connections.log");
+	        logger.addHandler(fileTxt);
+
+	        // create a TXT formatter
+	       // formatterTxt = new SimpleFormatter();
+	        //fileTxt.setFormatter(formatterTxt);
+	        
+	        
 			// Run forever, accepting and spawning a thread for each connection
 			while (true) {
 				ThreadPool.execute(new ClientHandler(serverSocket.accept(), logger));
@@ -52,9 +65,9 @@ public class G8RServer {
 		}
 
 		int servPort = Integer.parseInt(args[0]);// Server port
-		int threadNum = Integer.parseInt(args[1]);
+		int threadNum = Integer.parseInt(args[1]);//the number of thread in the thread pool
 
-		new G8RServer(servPort, threadNum);
+		new G8RServer(servPort, threadNum);//initial the server
 
 	}
 

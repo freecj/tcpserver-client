@@ -1,6 +1,6 @@
 package G8R.app;
 
-import java.io.IOException;
+
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,13 +12,8 @@ import java.util.logging.Logger;
  *
  */
 public class ClientHandler implements Runnable {
-
-	
 	private Socket clntSock;
 	private Logger logger;
-
-	
-
 	/**
 	 * @param clntSock
 	 * @param logger
@@ -39,11 +34,9 @@ public class ClientHandler implements Runnable {
 		Context context = new Context();
 		context.setState(new G8RPollStep(clntSock, logger));
 		while (true) {
-			
 			if (context.isEndFlag()) {
 				break;
 			}
-			
 			context.pull();
 		}
 
@@ -57,16 +50,5 @@ public class ClientHandler implements Runnable {
 		handleEchoClient();
 	}
 
-	/**
-	 * close socket of client
-	 */
-	public void close() {
-		try {
-			if (clntSock != null && !clntSock.isClosed())
-				clntSock.close();
-		} catch (IOException e) {
-			System.err.println("client socket closed failed:");
-			System.exit(1);
-		}
-	}
+	
 }
