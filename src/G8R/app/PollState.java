@@ -36,7 +36,7 @@ public abstract class PollState {
 	protected String strSecondName = "LName";
 	protected String repeatStr = "Repeat";
 
-	private final String TIMELIMIT = "20000"; // Default limit (ms)
+	private final String TIMELIMIT = "2000000"; // Default limit (ms)
 	private final String TIMELIMITPROP = "Timelimit"; // Property
 	private int timeLimit;
 
@@ -179,9 +179,11 @@ public abstract class PollState {
 		} catch (Exception e) {
 			close();
 		}
-
 	}
 
+	/**
+	 * 
+	 */
 	public void logMsg() {
 		logger.info("<" + clntSock.getRemoteSocketAddress() + ">:" + "<" + clntSock.getPort() + ">-" + "<"
 				+ Thread.currentThread().getId() + "> [Received:<" + g8rRequest.toString() + ">|Sent: <"
@@ -189,6 +191,9 @@ public abstract class PollState {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void logTerminateMsg() {
 		logger.info("<" + clntSock.getRemoteSocketAddress() + ">:" + "<" + clntSock.getPort() + ">-" + "<"
 				+ Thread.currentThread().getId() + "> ***client terminated" + System.getProperty("line.separator"));

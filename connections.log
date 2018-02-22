@@ -1,3 +1,15 @@
-Feb 21, 2018 4:32:02 PM G8R.app.PollState logTerminateMsg
-INFO: </129.62.150.56:50019>:<50019>-<12> ***client terminated
+Feb 21, 2018 11:35:47 PM G8R.app.PollState logMsg
+INFO: </192.168.0.5:51550>:<51550>-<12> [Received:<g8rrequest: Guess Cookies=[]>|Sent: <response: OK SendGuess Guess (0-9)? Cookies=[Num=6,Score=0]>]
+
+Feb 21, 2018 11:36:06 PM G8R.app.PollState logMsg
+INFO: </192.168.0.5:51550>:<51550>-<12> [Received:<g8rrequest: SendGuess  8Cookies=[Num=6,Score=6]>|Sent: <response: ERROR SendGuess Guess too high. Guess (0-9)?> Cookies=[Num=6,Score=6]>]
+
+Feb 21, 2018 11:36:34 PM G8R.app.PollState logMsg
+INFO: </192.168.0.5:51550>:<51550>-<12> [Received:<g8rrequest: SendGuess  5Cookies=[Num=6,Score=1]>|Sent: <response: ERROR SendGuess Guess too low. Guess (0-9)?> Cookies=[Num=6,Score=1]>]
+
+Feb 21, 2018 11:36:48 PM G8R.app.PollState logMsg
+INFO: </192.168.0.5:51550>:<51550>-<12> [Received:<g8rrequest: SendGuess  6Cookies=[Num=6,Score=99]>|Sent: <response: OK NULL Correct! Score=100 Cookies=[Num=6,Score=100]>]
+
+Feb 21, 2018 11:36:48 PM G8R.app.PollState logTerminateMsg
+INFO: </192.168.0.5:51550>:<51550>-<12> ***client terminated
 

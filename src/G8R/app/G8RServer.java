@@ -56,9 +56,9 @@ public class G8RServer {
 	}
 
 	/**
-	 * 
+	 * test the string is numeric
 	 * @param str
-	 * @return
+	 * @return true if is numeric, otherwise false
 	 */
 	public static boolean isNumeric(String str) {
 		Pattern pattern = Pattern.compile("[0-9]*");
@@ -66,6 +66,7 @@ public class G8RServer {
 	}
 
 	/**
+	 * main function of the server
 	 * @param args
 	 */
 	public static void main(String[] args) {

@@ -1,6 +1,5 @@
 package G8R.app;
 
-
 import java.net.Socket;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -31,13 +30,13 @@ public class G8RPollStep extends PollState{
 			if (strNamePoll.equals(g8rRequest.getFunction())) {
 				//Poll command fits
 				if (beforeCookie.findName(strFirstName) && beforeCookie.findName(strSecondName)) {
-					//have firstname and last name in request cookielist
+					//have firstname and last name in request cookielist, go to the foodstep
 					String msString = beforeCookie.getValue(strFirstName) + "'s Food mood>";
 					g8rResponse = new G8RResponse(statusOk, functionNameForFood, msString, beforeCookie);
 					
 					context.setState(new G8RFoodStep(clntSock, logger));
 				} else {
-					// does not have the name cookies
+					// does not have the name cookies, then go to the namestep
 					g8rResponse = new G8RResponse(statusOk, functionNameForName, "Name (First Last)>", beforeCookie);
 					context.setState(new G8RNameStep(clntSock, logger));
 					
