@@ -1,3 +1,10 @@
+/************************************************
+*
+* Author: <Jian Cao>
+* Assignment: <Programe 3 >
+* Class: <CSI 4321>
+*
+************************************************/
 package G8R.app;
 
 import java.net.InetSocketAddress;
@@ -51,12 +58,13 @@ public class G8RServer {
 			}
 		} catch (Exception e) {
 			ThreadPool.shutdown();
-			System.err.println(" " + e.getMessage());
+			System.err.println("G8RSever has exception. " + e.getMessage());
 		}
 	}
 
 	/**
 	 * test the string is numeric
+	 * 
 	 * @param str
 	 * @return true if is numeric, otherwise false
 	 */
@@ -67,6 +75,7 @@ public class G8RServer {
 
 	/**
 	 * main function of the server
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -76,10 +85,12 @@ public class G8RServer {
 			throw new IllegalArgumentException("Parameter(s): <Port> <thread number>");
 		}
 		if (isNumeric(args[0]) && isNumeric(args[1])) {
+			// args is numeric
 			int servPort = Integer.parseInt(args[0]);// Server port
 			int threadNum = Integer.parseInt(args[1]);// the number of thread in the thread pool
 			new G8RServer(servPort, threadNum);// initial the server
 		} else {
+			// args is wrong
 			System.err.println("Echo server <Port> or <thread number> is not numeric.");
 		}
 

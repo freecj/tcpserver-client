@@ -1,8 +1,17 @@
+/************************************************
+*
+* Author: <Jian Cao>
+* Assignment: <Programe 3 >
+* Class: <CSI 4321>
+*
+************************************************/
 package G8R.app;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import G8R.serialization.CookieList;
 import G8R.serialization.G8RMessage;
@@ -14,7 +23,6 @@ import G8R.serialization.ValidationException;
 
 /**
  * Poll command abstact class. have the read, write, generateMsg shared function
- *
  */
 public abstract class PollState {
 	// server do the action in the context
@@ -26,22 +34,23 @@ public abstract class PollState {
 	protected Socket clntSock;
 	protected Logger logger;
 
-	protected String strNamePoll = "Poll";
-	protected String functionNameForName = "NameStep";
-	protected String functionNameForNull = "NULL";
-	protected String functionNameForFood = "FoodStep";
-	protected String statusOk = "OK";
-	protected String statusError = "ERROR";
-	protected String strFirstName = "FName";
-	protected String strSecondName = "LName";
-	protected String repeatStr = "Repeat";
+	protected static String strNamePoll = "Poll";
+	protected static String functionNameForName = "NameStep";
+	protected static String functionNameForNull = "NULL";
+	protected static String functionNameForFood = "FoodStep";
+	protected static String statusOk = "OK";
+	protected static String statusError = "ERROR";
+	protected static String strFirstName = "FName";
+	protected static String strSecondName = "LName";
+	protected static String repeatStr = "Repeat";
 
-	private final String TIMELIMIT = "2000000"; // Default limit (ms)
+	private final String TIMELIMIT = "20000"; // Default limit (ms)
 	private final String TIMELIMITPROP = "Timelimit"; // Property
 	private int timeLimit;
 
-	protected String functionNameForSendGuess = "SendGuess";
-	protected String strNameGuess = "Guess";
+	protected static String functionNameForSendGuess = "SendGuess";
+	protected static String strNameGuess = "Guess";
+
 	/**
 	 * set the new context withe the new state to the new context.
 	 * 
@@ -88,7 +97,7 @@ public abstract class PollState {
 	 * @return true if the type of message is G8RRequest. otherwise false.
 	 */
 	public boolean read() {
-		
+
 		G8RMessage temp;
 		try {
 			clntSock.setSoTimeout(timeLimit);
@@ -107,23 +116,35 @@ public abstract class PollState {
 			try {
 				// if there is ValidationException, server need send NULL comand to end the
 				// connection.
-				g8rResponse = new G8RResponse(statusError, functionNameForNull, "Bad version", beforeCookie);
+				g8rResponse = new G8RResponse(statusError, functionNameForNull, "Bad version: " + e1.getToken(),
+						beforeCookie);
 				g8rResponse.encode(socketOut);
 				close();
 				return false;
 			} catch (ValidationException e) {
 				close();
 				return false;
+			} catch (SocketTimeoutException e) {
+				System.err.println("G8RSever read timeout. " + e.getMessage());
+				close();
+				return false;
 			} catch (IOException e) {
 				close();
+				System.err.println("G8RSever read IOException. " + e1.getMessage());
 				return false;
 			}
 
+		} catch (SocketTimeoutException e) {
+			close();
+			System.err.println("G8RSever read timeout. " + e.getMessage());
+			return false;
 		} catch (IOException e1) {
 			close();
+			System.err.println("G8RSever read IOException. " + e1.getMessage());
 			return false;
 		} catch (Exception e) {
 			close();
+			System.err.println("G8RSever read Exception. " + e.getMessage());
 			return false;
 		}
 	}
@@ -140,7 +161,6 @@ public abstract class PollState {
 
 		} catch (IOException e) {
 			System.err.println("client socket closed failed:");
-			System.exit(1);
 		}
 	}
 
@@ -166,23 +186,27 @@ public abstract class PollState {
 	}
 
 	/**
-	 * send response message
+	 * send response message and set time out
 	 */
 	public void writerMsg() {
 		try {
 			clntSock.setSoTimeout(timeLimit);
 			g8rResponse.encode(socketOut);
 			logMsg();
+		} catch (SocketTimeoutException e) {
+			close();
+			System.err.println("G8RSever write timeout. " + e.getMessage());
 		} catch (IOException e) {
 			close();
-
+			System.err.println("G8RSever write IOException. " + e.getMessage());
 		} catch (Exception e) {
 			close();
+			System.err.println("G8RSever write Exception. " + e.getMessage());
 		}
 	}
 
 	/**
-	 * 
+	 * log info of message information
 	 */
 	public void logMsg() {
 		logger.info("<" + clntSock.getRemoteSocketAddress() + ">:" + "<" + clntSock.getPort() + ">-" + "<"
@@ -192,14 +216,23 @@ public abstract class PollState {
 	}
 
 	/**
-	 * 
+	 * log info of client terminated
 	 */
 	public void logTerminateMsg() {
 		logger.info("<" + clntSock.getRemoteSocketAddress() + ">:" + "<" + clntSock.getPort() + ">-" + "<"
 				+ Thread.currentThread().getId() + "> ***client terminated" + System.getProperty("line.separator"));
 
 	}
-
+	/**
+	 * test the string is numeric
+	 * 
+	 * @param str
+	 * @return true if is numeric, otherwise false
+	 */
+	public boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(str).matches();
+	}
 	/**
 	 * state change and send response message
 	 */

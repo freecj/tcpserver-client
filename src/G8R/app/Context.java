@@ -1,6 +1,11 @@
+/************************************************
+*
+* Author: <Jian Cao>
+* Assignment: <Programe 3 >
+* Class: <CSI 4321>
+*
+************************************************/
 package G8R.app;
-
-
 
 /**
  * class which can identify the state of the server command
