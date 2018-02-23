@@ -223,6 +223,7 @@ public abstract class PollState {
 				+ Thread.currentThread().getId() + "> ***client terminated" + System.getProperty("line.separator"));
 
 	}
+
 	/**
 	 * test the string is numeric
 	 * 
@@ -233,6 +234,7 @@ public abstract class PollState {
 		Pattern pattern = Pattern.compile("[0-9]*");
 		return pattern.matcher(str).matches();
 	}
+
 	/**
 	 * state change and send response message
 	 */
