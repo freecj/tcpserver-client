@@ -1,39 +1,51 @@
-Feb 22, 2018 8:57:13 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65382>:<65382>-<12> [Received:<g8rrequest: Poll Cookies=[]>|Sent: <response: OK NameStep Name (First Last)> Cookies=[]>]
+Feb 26, 2018 4:16:40 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64385>:<64385>-<13> [Received:<g8rrequest: Poll Cookies=[FName=Bob,LName=s,Num=8,Repeat=3,Score=7]>|Sent: <response: OK FoodStep Bob's Food mood> Cookies=[FName=Bob,LName=s,Num=8,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:57:18 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65382>:<65382>-<12> [Received:<g8rrequest: NameStep  b aCookies=[]>|Sent: <response: OK FoodStep b's Food mood> Cookies=[FName=b,LName=a]>]
+Feb 26, 2018 4:16:49 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64383>:<64383>-<12> [Received:<g8rrequest: Guess Cookies=[FName=Bob,LName=s,Num=8,Repeat=3,Score=7]>|Sent: <response: OK SendGuess Guess (0-9)? Cookies=[FName=Bob,LName=s,Num=4,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:57:24 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65382>:<65382>-<12> [Received:<g8rrequest: FoodStep  b aCookies=[]>|Sent: <response: ERROR FoodStep Poorly formed food mood. 's Food mood> Cookies=[]>]
+Feb 26, 2018 4:17:00 PM G8R.app.PollState logTerminateMsg
+INFO: </129.62.150.56:64385>:<64385>-<13> ***client terminated
 
-Feb 22, 2018 8:57:35 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65382>:<65382>-<12> [Received:<g8rrequest: FoodStep  b a aCookies=[]>|Sent: <response: ERROR FoodStep Poorly formed food mood. 's Food mood> Cookies=[]>]
+Feb 26, 2018 4:17:09 PM G8R.app.PollState logTerminateMsg
+INFO: </129.62.150.56:64383>:<64383>-<12> ***client terminated
 
-Feb 22, 2018 8:57:37 PM G8R.app.PollState logTerminateMsg
-INFO: </129.62.150.56:65382>:<65382>-<12> ***client terminated
+Feb 26, 2018 4:17:35 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64395>:<64395>-<13> [Received:<g8rrequest: Poll Cookies=[FName=Bob,LName=s,Num=4,Repeat=3,Score=7]>|Sent: <response: OK FoodStep Bob's Food mood> Cookies=[FName=Bob,LName=s,Num=4,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:57:47 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65387>:<65387>-<13> [Received:<g8rrequest: Poll Cookies=[]>|Sent: <response: OK NameStep Name (First Last)> Cookies=[]>]
+Feb 26, 2018 4:17:40 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: Guess Cookies=[FName=Bob,LName=s,Num=4,Repeat=3,Score=7]>|Sent: <response: OK SendGuess Guess (0-9)? Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:57:51 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65387>:<65387>-<13> [Received:<g8rrequest: NameStep  b aCookies=[]>|Sent: <response: OK FoodStep b's Food mood> Cookies=[FName=b,LName=a]>]
+Feb 26, 2018 4:17:54 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64395>:<64395>-<13> [Received:<g8rrequest: FoodStep  bobCookies=[FName=Bob,LName=s,Num=4,Repeat=3,Score=7]>|Sent: <response: OK NULL 10%+4% off at McDonalds Cookies=[FName=Bob,LName=s,Num=4,Repeat=4,Score=7]>]
 
-Feb 22, 2018 8:58:02 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65387>:<65387>-<13> [Received:<g8rrequest: FoodStep  b 1Cookies=[]>|Sent: <response: ERROR FoodStep Poorly formed food mood. 's Food mood> Cookies=[]>]
+Feb 26, 2018 4:17:54 PM G8R.app.PollState logTerminateMsg
+INFO: </129.62.150.56:64395>:<64395>-<13> ***client terminated
 
-Feb 22, 2018 8:58:06 PM G8R.app.PollState logTerminateMsg
-INFO: </129.62.150.56:65387>:<65387>-<13> ***client terminated
+Feb 26, 2018 4:17:54 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64404>:<64404>-<13> [Received:<g8rrequest: Poll Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: OK FoodStep Bob's Food mood> Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:58:16 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65390>:<65390>-<12> [Received:<g8rrequest: Poll Cookies=[]>|Sent: <response: OK NameStep Name (First Last)> Cookies=[]>]
+Feb 26, 2018 4:18:00 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: SendGuess  1Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: ERROR SendGuess Guess too low. Guess (0-9)?> Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:58:31 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65390>:<65390>-<12> [Received:<g8rrequest: NameStep  1 2Cookies=[]>|Sent: <response: OK FoodStep 1's Food mood> Cookies=[FName=1,LName=2]>]
+Feb 26, 2018 4:18:02 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: SendGuess  2Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: ERROR SendGuess Guess too low. Guess (0-9)?> Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:58:52 PM G8R.app.PollState logMsg
-INFO: </129.62.150.56:65390>:<65390>-<12> [Received:<g8rrequest: FoodStep  bbbbbbbbbbCookies=[Repeat=1]>|Sent: <response: OK NULL 10%+2% off at McDonalds Cookies=[Repeat=2]>]
+Feb 26, 2018 4:18:10 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: SendGuess  5Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: ERROR SendGuess Guess too high. Guess (0-9)?> Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
 
-Feb 22, 2018 8:58:52 PM G8R.app.PollState logTerminateMsg
-INFO: </129.62.150.56:65390>:<65390>-<12> ***client terminated
+Feb 26, 2018 4:18:14 PM G8R.app.PollState logTerminateMsg
+INFO: </129.62.150.56:64404>:<64404>-<13> ***client terminated
+
+Feb 26, 2018 4:18:19 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: SendGuess  4Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: ERROR SendGuess Guess too high. Guess (0-9)?> Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
+
+Feb 26, 2018 4:18:35 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: SendGuess  4Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: ERROR SendGuess Guess too high. Guess (0-9)?> Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>]
+
+Feb 26, 2018 4:18:43 PM G8R.app.PollState logMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> [Received:<g8rrequest: SendGuess  3Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=7]>|Sent: <response: OK NULL Correct! Score=8 Cookies=[FName=Bob,LName=s,Num=3,Repeat=3,Score=8]>]
+
+Feb 26, 2018 4:18:43 PM G8R.app.PollState logTerminateMsg
+INFO: </129.62.150.56:64400>:<64400>-<12> ***client terminated
 

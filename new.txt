@@ -1,6 +1,6 @@
 FName=Bob
 LName=s
-Num=0
+Num=3
 Repeat=3
-Score=6
+Score=7
 

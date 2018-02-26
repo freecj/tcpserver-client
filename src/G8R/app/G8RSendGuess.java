@@ -75,7 +75,6 @@ public class G8RSendGuess extends PollState {
 					} else {
 						// cookie value of Num is not right
 						generateErrorMsg("malfunction, Num is beyond the range 0-9");
-						logger.info("Client " + clntSock.getRemoteSocketAddress() + "");
 					}
 				} else {
 					// no cookiename=Num
