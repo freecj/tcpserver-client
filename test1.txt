@@ -1,6 +1,0 @@
-FName=Bo
-LName=Smith
-Num=2
-Repeat=29
-Score=18
-
