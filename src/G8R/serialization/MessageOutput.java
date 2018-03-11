@@ -27,7 +27,6 @@ public class MessageOutput {
 	 * 
 	 * @param out outputstream
 	 * @exception java.lang.NullPointerException if out is null
-	 * @throws UnsupportedEncodingException
 	 */
 	public MessageOutput(java.io.OutputStream out) throws NullPointerException {
 		if (out == null) {

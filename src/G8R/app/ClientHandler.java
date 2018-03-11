@@ -29,9 +29,6 @@ public class ClientHandler implements Runnable {
 
 	/**
 	 * Creates a new ClientHandler thread for the socket provided.
-	 * 
-	 * @param clientSocket
-	 *            the socket to the client.
 	 */
 	public void handleEchoClient() {
 		Context context = new Context();

@@ -30,7 +30,6 @@ public class MessageInput {
 	 * 
 	 * @param in byte input source
 	 * @exception java.lang.NullPointerException if in is null
-	 * @throws UnsupportedEncodingException 
 	 */
 	public MessageInput(InputStream in) throws NullPointerException {
 		Objects.requireNonNull(in, "InputStream is null");

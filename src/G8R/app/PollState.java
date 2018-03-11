@@ -92,8 +92,6 @@ public abstract class PollState {
 	 * decode message from the client, assign it for g8rRequest
 	 * 
 	 * @throws NullPointerException
-	 * @throws IOException
-	 * @throws ValidationException
 	 * @return true if the type of message is G8RRequest. otherwise false.
 	 */
 	public boolean read() {
