@@ -32,10 +32,7 @@ Request:
 G8R/1.0 Q RUN NameStep Bob Smith\r\n
 \r\n
 G8RResponse:
-G8R/1.0 R OK FoodStep Bob’s Food mood>\r\n
-
-FName=Bob\r\n
-
+G8R/1.0 R OK FoodStep Bob’s Food mood>\r\n (Message part)
+FName=Bob\r\n(Cookies part)
 LName=Smith\r\n
-
 \r\n
