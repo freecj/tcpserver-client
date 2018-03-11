@@ -1,4 +1,0 @@
-FName=Bob
-LName=sMITH
-Repeat=2
-
