@@ -1,6 +1,0 @@
-FName=Bob
-LName=s
-Num=3
-Repeat=3
-Score=7
-
